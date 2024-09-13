@@ -206,7 +206,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(safeMode);
 
-	const nativeCodeGen = vscode.commands.registerCommand("rbxstu-vs.setnativecodegen", () => {
+	const nativeCodeGen = vscode.commands.registerCommand("rbxstu-v2.setnativecodegen", () => {
 		if (!isConnectedToRbxStu()) {
 			vscode.window.showErrorMessage("The extension is not connected to RbxStu V2!");
 			return;
@@ -237,7 +237,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 	context.subscriptions.push(nativeCodeGen);
 
-	const sethwid = vscode.commands.registerCommand("rbxstu-vs.sethttp", () => {
+	const sethwid = vscode.commands.registerCommand("rbxstu-v2.sethttp", () => {
 		if (!isConnectedToRbxStu()) {
 			vscode.window.showErrorMessage("The extension is not connected to RbxStu V2!");
 			return;
