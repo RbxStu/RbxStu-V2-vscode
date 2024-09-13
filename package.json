@@ -1,0 +1,86 @@
+{
+  "name": "rbxstu-v2",
+  "displayName": "RbxStu-V2",
+  "description": "Provides a UI for RbxStu V2 using Visual Studio Code",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.93.0"
+  },
+  "repository": "",
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "rbxstu-v2.execute",
+        "title": "RbxStu V2: Send for Execution"
+      },
+      {
+        "command": "rbxstu-v2.change_datamodel",
+        "title": "RbxStu V2: Change Execution DataModel"
+      },
+      {
+        "command": "rbxstu-v2.connect",
+        "title": "RbxStu V2: Connect To RbxStu V2"
+      },
+      {
+        "command": "rbxstu-v2.disconnect",
+        "title": "RbxStu V2: Disconnect from RbxStu V2"
+      },
+      {
+        "command": "rbxstu-v2.block_function",
+        "title": "RbxStu V2: Block a Function in RbxStu-V2"
+      },
+      {
+        "command": "rbxstu-v2.unblock_function",
+        "title": "RbxStu V2: Unblock a Function in RbxStu-V2"
+      },
+      {
+        "command": "rbxstu-v2.setsafemode",
+        "title": "RbxStu V2: Manage Safe Mode"
+      },
+      {
+        "command": "rbxstu-v2.setnativecodegen",
+        "title": "RbxStu V2: Manage Native Code Generation"
+      },
+      {
+        "command": "rbxstu-v2.sethttp",
+        "title": "RbxStu V2: Set HTTP Headers"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "npm run check-types && npm run lint && node esbuild.js",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package": "npm run check-types && npm run lint && node esbuild.js --production",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.7",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.93.0",
+    "@types/ws": "^8.5.12",
+    "@typescript-eslint/eslint-plugin": "^8.3.0",
+    "@typescript-eslint/parser": "^8.3.0",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.4.1",
+    "esbuild": "^0.23.1",
+    "eslint": "^9.9.1",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}
