@@ -41,7 +41,7 @@ jobs:
           path: ${{ env.vsix_file }}
 
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v1.9.2
         with:
           tag: ${{ github.ref }}
           files: ${{ env.vsix_file }}
