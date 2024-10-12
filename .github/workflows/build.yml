@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - dev
-  release:
-    types: [created]
 
 jobs:
   build:
@@ -55,19 +53,13 @@ jobs:
           VERSION=$(jq -r .version < package.json)
           TAG="v$VERSION"
           echo "TAG=$TAG" >> $GITHUB_ENV
-          if git rev-parse "$TAG" >/dev/null 2>&1; then
+
+          if git ls-remote --tags origin | grep -q "refs/tags/$TAG"; then
             echo "Tag $TAG already exists, skipping creation."
           else
             git tag $TAG
             git push origin $TAG
           fi
-
-      - name: Upload extension
-        if: env.vsix_file != ''
-        uses: actions/upload-artifact@v3
-        with:
-          name: my-extension
-          path: ${{ env.vsix_file }}
 
       - name: Release
         uses: softprops/action-gh-release@v1
