@@ -35,16 +35,22 @@ jobs:
       - name: Find .vsix file
         id: find_vsix
         run: |
-          echo "vsix_file=$(ls *.vsix)" >> $GITHUB_ENV
+          if ls *.vsix 1> /dev/null 2>&1; then
+            echo "vsix_file=$(ls *.vsix)" >> $GITHUB_ENV
+          else
+            echo "No .vsix file found."
+            exit 1
+          fi
 
       - name: Upload extension
+        if: env.vsix_file != ''
         uses: actions/upload-artifact@v3
         with:
           name: my-extension
           path: ${{ env.vsix_file }}
 
       - name: Release
-        uses: softprops/action-gh-release@v2.0.8
+        uses: softprops/action-gh-release@v1
         with:
           tag: ${{ github.ref }}
           files: ${{ env.vsix_file }}
