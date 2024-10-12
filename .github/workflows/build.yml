@@ -74,7 +74,13 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref }}
+          tag_name: ${{ steps.get_tag.outputs.TAG }}
           files: ${{ env.vsix_file }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get Tag
+        id: get_tag
+        run: |
+          VERSION=$(jq -r .version < package.json)
+          echo "::set-output name=TAG::v$VERSION"
