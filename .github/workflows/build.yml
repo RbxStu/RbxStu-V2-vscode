@@ -47,6 +47,7 @@ jobs:
           else
             echo "No .vsix file found."
             exit 1
+          fi
 
       - name: Upload extension
         if: env.vsix_file != ''
