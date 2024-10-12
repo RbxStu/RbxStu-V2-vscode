@@ -1,0 +1,7 @@
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag: ${{ github.ref }}
+          files: my-extension-*.vsix
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # chatgpt pls work 100% no rat free solara xeno wave 100934939

@@ -1,0 +1,70 @@
+name: Build and Package Extension
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Install esbuild
+        run: npm install esbuild
+
+      - name: Build extension
+        run: node esbuild.js
+
+      - name: Copy extension
+        run: |
+          cp dist/extension.js extension.js
+          cp dist/extension.js.map extension.js.map
+
+      - name: Package extension
+        run: |
+          npm install -g @vscode/vsce
+          vsce package
+
+      - name: Find .vsix file
+        id: find_vsix
+        run: |
+          if ls *.vsix 1> /dev/null 2>&1; then
+            echo "vsix_file=$(ls *.vsix)" >> $GITHUB_ENV
+          else
+            echo "No .vsix file found."
+            exit 1
+          fi
+
+      - name: Get version and tag
+        id: get_tag
+        run: |
+          VERSION=$(jq -r .version < package.json)
+          TAG="v$VERSION"
+          echo "TAG=$TAG" >> $GITHUB_ENV
+
+          if git ls-remote --tags origin | grep -q "refs/tags/$TAG"; then
+            echo "Tag $TAG already exists, skipping creation."
+          else
+            git tag $TAG
+            git push origin $TAG
+          fi
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.TAG }}
+          files: ${{ env.vsix_file }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
