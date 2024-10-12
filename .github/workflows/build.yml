@@ -32,18 +32,18 @@ jobs:
       - name: Find .vsix file
         id: find_vsix
         run: |
-          echo "::set-output name=vsix_file::$(ls *.vsix)"
+          echo "vsix_file=$(ls *.vsix)" >> $GITHUB_ENV
 
       - name: Upload extension
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: my-extension
-          path: ${{ steps.find_vsix.outputs.vsix_file }}
+          path: ${{ env.vsix_file }}
 
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           tag: ${{ github.ref }}
-          files: ${{ steps.find_vsix.outputs.vsix_file }} 
+          files: ${{ env.vsix_file }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
