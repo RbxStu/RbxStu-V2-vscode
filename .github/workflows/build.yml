@@ -74,7 +74,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          tag: ${{ github.ref }}
+          tag_name: ${{ github.ref }}
           files: ${{ env.vsix_file }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
