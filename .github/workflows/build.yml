@@ -29,13 +29,14 @@ jobs:
       - name: Build extension
         run: node esbuild.js
 
-      - name: Copy package.json to dist
-        run: cp package.json dist/package.json
+      - name: Copy extension
+        run: |
+          cp dist/extension.js extension.js
+          cp dist/extension.js.map extension.js.map
 
       - name: Package extension
         run: |
           npm install -g @vscode/vsce
-          cd dist
           vsce package
 
       - name: Find .vsix file
