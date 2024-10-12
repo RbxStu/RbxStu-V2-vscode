@@ -61,15 +61,20 @@ jobs:
         run: |
           VERSION=$(jq -r .version < package.json)
           TAG="v$VERSION"
-          git tag $TAG
-          git push origin $TAG
+
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists, skipping creation."
+          else
+            git tag $TAG
+            git push origin $TAG
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v${{ steps.create_tag.outputs.TAG }}
+          tag_name: v${{ steps.create_tag.outputs.TAG }}  
           files: ${{ env.vsix_file }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
