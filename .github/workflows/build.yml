@@ -27,7 +27,7 @@ jobs:
         run: npm install esbuild
 
       - name: Build extension
-        run: npm run esbuild.js
+        run: node esbuild.js
 
       - name: Package extension
         run: npm run package
