@@ -18,7 +18,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '21'
 
       - name: Install dependencies
         run: npm install
@@ -29,8 +29,21 @@ jobs:
       - name: Package extension
         run: npm run package
 
+      - name: Find .vsix file
+        id: find_vsix
+        run: |
+          echo "::set-output name=vsix_file::$(ls *.vsix)"
+
       - name: Upload extension
         uses: actions/upload-artifact@v2
         with:
           name: my-extension
-          path: *.vsix
+          path: ${{ steps.find_vsix.outputs.vsix_file }}
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag: ${{ github.ref }}
+          files: ${{ steps.find_vsix.outputs.vsix_file }} 
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
