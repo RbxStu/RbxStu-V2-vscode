@@ -56,10 +56,20 @@ jobs:
           name: my-extension
           path: ${{ env.vsix_file }}
 
+      - name: Create Tag
+        id: create_tag
+        run: |
+          VERSION=$(jq -r .version < package.json)
+          TAG="v$VERSION"
+          git tag $TAG
+          git push origin $TAG
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref }}
+          tag_name: ${{ steps.create_tag.outputs.tag }}
           files: ${{ env.vsix_file }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
