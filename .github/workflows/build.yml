@@ -30,7 +30,12 @@ jobs:
         run: node esbuild.js
 
       - name: Package extension
-        run: npm run package
+        run: |
+          cd dist
+
+          npm install -g @vscode/vsce
+          
+          vsce package --baseContentUrl https://github.com/${{ github.repository }}/raw/${{ github.ref }}/dist --baseImagesUrl https://github.com/${{ github.repository }}/raw/${{ github.ref }}/dist
 
       - name: Find .vsix file
         id: find_vsix
