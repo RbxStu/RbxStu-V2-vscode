@@ -47,7 +47,6 @@ jobs:
           else
             echo "No .vsix file found."
             exit 1
-          fi
 
       - name: Upload extension
         if: env.vsix_file != ''
@@ -61,9 +60,9 @@ jobs:
         run: |
           VERSION=$(jq -r .version < package.json)
           TAG="v$VERSION"
-
-          if git rev-parse "$TAG" >/dev/null 2>&1; then
-            echo "Tag $TAG already exists, skipping creation."
+          
+          if git ls-remote --tags origin | grep -q "refs/tags/$TAG"; then
+            echo "Tag $TAG already exists on remote, skipping creation."
           else
             git tag $TAG
             git push origin $TAG
@@ -72,10 +71,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Release
-        if: steps.create_tag.outputs.TAG != ''
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v${{ steps.create_tag.outputs.TAG }}  
+          tag: ${{ github.ref }}
           files: ${{ env.vsix_file }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
